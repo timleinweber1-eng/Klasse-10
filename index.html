@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klassenwebseite 10a</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; color: #333; }
+        header { text-align: center; margin-bottom: 30px; }
+        .nav-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
+        .nav-btn { padding: 12px 24px; font-size: 16px; border: none; background-color: #007bff; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .nav-btn:hover { background-color: #0056b3; }
+        .section { display: none; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 800px; margin: 0 auto; }
+        .active { display: block; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        form { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+        input, select, button { padding: 8px; font-size: 14px; }
+        .fach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-top: 20px; }
+        .fach-btn { padding: 20px 10px; background: #e9ecef; border: 1px solid #ccc; border-radius: 5px; text-align: center; cursor: pointer; font-weight: bold; font-size: 15px; }
+        .fach-btn:hover { background: #dee2e6; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Klassenwebseite der 10a</h1>
+</header>
+
+<div class="nav-buttons">
+    <button class="nav-btn" onclick="showSection('tests')">📝 Tests & Arbeiten</button>
+    <button class="nav-btn" onclick="showSection('tafelbilder')">🗂️ Digitale Hefter</button>
+</div>
+
+<!-- OPTION 1: TESTS -->
+<div id="tests" class="section active">
+    <h2>Anstehende Tests & Klassenarbeiten</h2>
+    <table>
+        <thead><tr><th>Datum</th><th>Fach</th><th>Thema</th></tr></thead>
+        <tbody id="test-list"></tbody>
+    </table>
+    
+    <form onsubmit="addTest(event)">
+        <input type="date" id="test-date" required>
+        
+        <!-- FÄCHER-AUSWAHL FÜR TESTS -->
+        <select id="test-fach" required>
+            <option value="" disabled selected>Fach auswählen...</option>
+            <option value="Mathe">Mathe</option>
+            <option value="Deutsch">Deutsch</option>
+            <option value="Englisch">Englisch</option>
+            <option value="Physik">Physik</option>
+            <option value="Chemie">Chemie</option>
+            <option value="Biologie">Biologie</option>
+            <option value="Geographie">Geographie</option>
+            <option value="Sozialkunde">Sozialkunde</option>
+            <option value="AWT">AWT</option>
+            <option value="Musik">Musik</option>
+            <option value="Kunst">Kunst</option>
+            <option value="Religion">Religion</option>
+            <option value="PV">PV</option>
+            <option value="IMb">IMb</option>
+            <option value="Klassenstunde">Klassenstunde</option>
+        </select>
+        
+        <input type="text" id="test-thema" placeholder="Thema (z.B. Trigonometrie)" required>
+        <button type="submit" style="background:#28a745; color:white; border:none; cursor:pointer; border-radius:4px;">Eintragen</button>
+    </form>
+</div>
+
+<!-- OPTION 2: TAFELBILDER -->
+<div id="tafelbilder" class="section">
+    <h2>Digitale Hefter / Tafelbilder</h2>
+    
+    <!-- ÜBERSICHT DER FÄCHER-ORDNER -->
+    <div id="fach-auswahl" class="fach-grid">
+        <div class="fach-btn" onclick="openFach('Mathe')">📐 Mathe</div>
+        <div class="fach-btn" onclick="openFach('Deutsch')">📚 Deutsch</div>
+        <div class="fach-btn" onclick="openFach('Englisch')">🇬🇧 Englisch</div>
+        <div class="fach-btn" onclick="openFach('Physik')">⚛️ Physik</div>
+        <div class="fach-btn" onclick="openFach('Chemie')">🧪 Chemie</div>
+        <div class="fach-btn" onclick="openFach('Biologie')">🧬 Biologie</div>
+        <div class="fach-btn" onclick="openFach('Geographie')">🌍 Geographie</div>
+        <div class="fach-btn" onclick="openFach('Sozialkunde')">⚖️ Sozialkunde</div>
+        <div class="fach-btn" onclick="openFach('AWT')">🛠️ AWT</div>
+        <div class="fach-btn" onclick="openFach('Musik')">🎵 Musik</div>
+        <div class="fach-btn" onclick="openFach('Kunst')">🎨 Kunst</div>
+        <div class="fach-btn" onclick="openFach('Religion')">⛪ Religion</div>
+        <div class="fach-btn" onclick="openFach('PV')">💼 PV</div>
+        <div class="fach-btn" onclick="openFach('IMb')">💻 IMb</div>
+        <div class="fach-btn" onclick="openFach('Klassenstunde')">👥 Klassenstunde</div>
+    </div>
+
+    <!-- DIE SEPARATE ANSICHT FÜR EIN GEWÄHLTES FACH -->
+    <div id="fach-ansicht" style="display:none; margin-top:20px;">
+        <button onclick="backToFaecher()" style="padding:6px 12px; margin-bottom:15px; cursor:pointer;">← Zurück zu den Fächern</button>
+        <h3 id="aktuelles-fach">Fach</h3>
+        <table>
+            <thead><tr><th>Datum</th><th>Link zum Tafelbild</th></tr></thead>
+            <tbody id="tafelbild-list"></tbody>
+        </table>
+        <form onsubmit="addTafelbild(event)">
+            <input type="date" id="tb-date" required>
+            <input type="text" id="tb-link" placeholder="Link zum Foto (z.B. von postimages.org)" required>
+            <button type="submit" style="background:#28a745; color:white; border:none; cursor:pointer; border-radius:4px;">Bild hinzufügen</button>
+        </form>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://gstatic.com";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://gstatic.com";
+
+    // Deine Firebase-Verbindungsdaten von deinem Foto
+    const firebaseConfig = {
+        apiKey: "AIzaSyBPte21V7tIt1Vt5nNWPH4Y7ucO-wmog9U",
+        authDomain: "://firebaseapp.com",
+        projectId: "klassenwebsite10a",
+        storageBucket: "klassenwebsite10a.firebasestorage.app",
+        messagingSenderId: "760596210468",
+        appId: "1:760596210468:web:60913f8ba62d659d4e89b1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Wechseln zwischen den Tabs
+    window.showSection = function(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    // TESTS AUTOMATISCH LADEN
+    const qTests = query(collection(db, "tests"), orderBy("date", "asc"));
+    onSnapshot(qTests, (snapshot) => {
+        const tbody = document.getElementById("test-list");
+        tbody.innerHTML = "";
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.fach}</td><td>${data.thema}</td></tr>`;
+        });
+    });
+
+    // NEUEN TEST SPEICHERN
+    window.addTest = async function(e) {
+        e.preventDefault();
+        await addDoc(collection(db, "tests"), {
+            date: document.getElementById("test-date").value,
+            fach: document.getElementById("test-fach").value,
+            thema: document.getElementById("test-thema").value
+        });
+        e.target.reset();
+    }
+
+    // FACH ORDNER ÖFFNEN
+    let gewaehltesFach = "";
+    window.openFach = function(fach) {
+        gewaehltesFach = fach;
+        document.getElementById("fach-auswahl").style.display = "none";
+        document.getElementById("fach-ansicht").style.display = "block";
+        document.getElementById("aktuelles-fach").innerText = "Tafelbilder für: " + fach;
+        
+        // Tafelbilder für dieses eine Fach automatisch laden
+        const qBilder = query(collection(db, "tafelbilder_" + fach), orderBy("date", "desc"));
+        onSnapshot(qBilder, (snapshot) => {
+            const tbody = document.getElementById("tafelbild-list");
+            tbody.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                tbody.innerHTML += `<tr><td>${data.date}</td><td><a href="${data.link}" target="_blank">Bild öffnen ↗</a></td></tr>`;
+            });
+        });
+    }
+
+    window.backToFaecher = function() {
+        document.getElementById("fach-auswahl").style.display = "grid";
+        document.getElementById("fach-ansicht").style.display = "none";
+    }
+
+    // NEUES TAFELBILD SPEICHERN
+    window.addTafelbild = async function(e) {
+        e.preventDefault();
+        await addDoc(collection(db, "tafelbilder_" + gewaehltesFach), {
+            date: document.getElementById("tb-date").value,
+            link: document.getElementById("tb-link").value
+        });
+        e.target.reset();
+    }
+</script>
+</body>
+</html>
